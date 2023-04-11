@@ -4,28 +4,24 @@ import PlivoVoiceKit
 
 @objc(PlivoSdk)
 class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
+    private var hasListeners : Bool = false
 
-    var hasListeners : Bool = false
-
-    var endpoint: PlivoEndpoint = PlivoEndpoint.init();
+    private var endpoint: PlivoEndpoint = PlivoEndpoint.init(["debug" : true, "enableTracking":true])
 
     private var outCall: PlivoOutgoing?
 
     override init() {
-        super.init()
         print("PlivoSdk ReactNativeEventEmitter init")
-
-        endpoint.delegate = self;
+        super.init()
+        endpoint.delegate = self
     }
 
     override static func requiresMainQueueSetup() -> Bool {
         return true
     }
 
-    // we need to override this method and
-    // return an array of event names that we can listen to
     override func supportedEvents() -> [String]! {
-        return ["Plivo-onIncomingCall", "Plivo-onLogin", "Plivo-onLoginFailed", "Plivo-onLogout", "Plivo-onIncomingCallHangup", "Plivo-onIncomingCallRejected", "Plivo-onOutgoingCall", "Plivo-onOutgoingCallAnswered", "Plivo-onOutgoingCallRejected", "Plivo-onOutgoingCallHangup", "Plivo-onOutgoingCallInvalid" ]
+        return ["Plivo-onIncomingCall", "Plivo-onLogin", "Plivo-onLoginFailed", "Plivo-onLogout", "Plivo-onIncomingCallHangup", "Plivo-onIncomingCallRejected", "Plivo-onOutgoingCall", "Plivo-onOutgoingCallAnswered", "Plivo-onOutgoingCallRinging", "Plivo-onOutgoingCallRejected", "Plivo-onOutgoingCallHangup", "Plivo-onOutgoingCallInvalid" ]
     }
 
     override func startObserving() {
@@ -59,23 +55,33 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
     }
 
     @objc(call:headers:)
-    func call(withDest dest: String, andHeaders headers: NSDictionary) -> PlivoOutgoing {
-
-        let extraHeaders: [AnyHashable: Any] = [:]
-
+    func call(withDest dest: String, andHeaders headers: [AnyHashable: Any]) -> PlivoOutgoing {
         var error: NSError?
-
-        // var error = NSError(domain: "com.cloint.app", code: 0, userInfo: [NSLocalizedDescriptionKey: "message"])
 
         let domain: String = "@phone.plivo.com"
 
         /* construct SIP URI , where kENDPOINTURL is a contant contaning domain name details*/
         let sipUri: String = "sip:\(dest)\(domain)"
-        /* create PlivoOutgoing object */
+
         outCall = (endpoint.createOutgoingCall())!
-        /* do the call */
-        outCall?.call(sipUri, headers: extraHeaders, error: &error)
+        outCall?.call(sipUri, headers: headers, error: &error)
+
         return outCall!
+    }
+
+    @objc(configureAudioSession)
+    func configureAudioSession() {
+        endpoint.configureAudioDevice()
+    }
+
+    @objc(startAudioDevice)
+    func startAudioDevice() {
+        endpoint.startAudioDevice()
+    }
+
+    @objc(stopAudioDevice)
+    func stopAudioDevice() {
+        endpoint.stopAudioDevice()
     }
 
     func onLogin() {
@@ -90,22 +96,65 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
         sendEvent(withName: "Plivo-onLoginFailed", body:nil);
     }
 
-    func onOutgoingCallRejected(_ call: PlivoOutgoing) {
-        let body: [String: Any] = [
-            "callId": call.callId,
-            "state": call.state.rawValue
-        ];
-
-        sendEvent(withName: "Plivo-onOutgoingCallRejected", body: body);
+    func onOutgoingCallRejected(_ outgoing: PlivoOutgoing) {
+        sendEvent(withName: "Plivo-onOutgoingCallRejected", body: convertOutgoingCallToObject(call:outgoing));
     }
 
-    func onOutgoingCallInvalid(_ call: PlivoOutgoing) {
-      let body: [String: Any] = [
-          "callId": call.callId,
-          "state": call.state.rawValue
-      ];
+    func onOutgoingCallInvalid(_ outgoing: PlivoOutgoing) {
+      sendEvent(withName: "Plivo-onOutgoingCallInvalid", body: convertOutgoingCallToObject(call:outgoing));
+    }
 
-      sendEvent(withName: "Plivo-onOutgoingCallInvalid", body: body);
+    func onOutgoingCallRinging(_ outgoing: PlivoOutgoing!) {
+        sendEvent(withName: "Plivo-onOutgoingCallRinging", body: convertOutgoingCallToObject(call:outgoing));
+    }
 
-   }
+    func onOutgoingCallHangup(_ outgoing: PlivoOutgoing!) {
+        sendEvent(withName: "Plivo-onOutgoingCallHangup", body: convertOutgoingCallToObject(call:outgoing));
+    }
+
+    func onOutgoingCallAnswered(_ outgoing: PlivoOutgoing!) {
+        sendEvent(withName: "Plivo-onOutgoingCallAnswered", body: convertOutgoingCallToObject(call:outgoing));
+    }
+
+    func onIncomingCall(_ incoming: PlivoIncoming!) {
+        sendEvent(withName: "Plivo-onIncomingCall", body: convertIncomintCallToObject(call:incoming));
+    }
+
+    func onIncomingCallHangup(_ incoming: PlivoIncoming!) {
+        sendEvent(withName: "Plivo-onIncomingCallHangup", body: convertIncomintCallToObject(call:incoming));
+    }
+
+    func onIncomingCallAnswered(_ incoming: PlivoIncoming!) {
+        sendEvent(withName: "Plivo-onIncomingCallAnswered", body: convertIncomintCallToObject(call:incoming));
+    }
+
+    func onIncomingCallInvalid(_ incoming: PlivoIncoming!) {
+        sendEvent(withName: "Plivo-onIncomingCallInvalid", body: convertIncomintCallToObject(call:incoming));
+    }
+
+    func onIncomingCallRejected(_ incoming: PlivoIncoming!) {
+        sendEvent(withName: "Plivo-onIncomingCallRejected", body: convertIncomintCallToObject(call:incoming));
+    }
+
+    private func convertOutgoingCallToObject (call: PlivoOutgoing!) -> [String: Any] {
+        let body: [String: Any] = [
+            "callId": call.callId,
+            "state": call.state.rawValue,
+            "muted": call.muted,
+            "isOnHold": call.isOnHold
+        ];
+
+        return body;
+    }
+
+    private func convertIncomintCallToObject (call: PlivoIncoming!) -> [String: Any] {
+        let body: [String: Any] = [
+            "callId": call.callId,
+            "state": call.state.rawValue,
+            "muted": call.muted,
+            "isOnHold": call.isOnHold
+        ];
+
+        return body;
+    }
 }

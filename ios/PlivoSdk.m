@@ -13,4 +13,10 @@ RCT_EXTERN_METHOD(call:(nonnull NSString *)dest
                     headers:(NSDictionary *)headers
                   )
 
+RCT_EXTERN_METHOD(configureAudioSession)
+
+RCT_EXTERN_METHOD(startAudioDevice)
+
+RCT_EXTERN_METHOD(stopAudioDevice)
+
 @end
