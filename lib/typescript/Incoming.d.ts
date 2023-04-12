@@ -1,6 +1,6 @@
 declare class Incoming {
-    private _callUUID;
-    constructor(callUUID?: string);
+    private callId;
+    constructor(id?: string);
     mute(): void;
     unmute(): void;
     sendDigits(): void;

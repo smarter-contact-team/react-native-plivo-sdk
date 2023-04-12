@@ -1,7 +1,6 @@
 declare class Outgoing {
-    private _callUUID;
-    constructor(callUUID?: string);
-    call(): void;
+    private callId;
+    constructor(id?: string);
     mute(): void;
     unmute(): void;
     sendDigits(): void;
