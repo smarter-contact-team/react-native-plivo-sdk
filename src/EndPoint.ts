@@ -30,7 +30,7 @@ class EndPoint {
   private _isLoggedIn = false;
 
   call(phoneNumber: string, headers: Record<string, string>) {
-    RNReactNativePlivo.call(phoneNumber, headers);
+    return RNReactNativePlivo.call(phoneNumber, headers);
   }
 
   login(
@@ -39,7 +39,12 @@ class EndPoint {
     fcmToken: string,
     certificateId: string
   ) {
-    RNReactNativePlivo.login(username, password, fcmToken, certificateId);
+    return RNReactNativePlivo.login(
+      username,
+      password,
+      fcmToken,
+      certificateId
+    );
   }
 
   logout() {
@@ -57,6 +62,26 @@ class EndPoint {
 
   stopAudioDevice() {
     RNReactNativePlivo.stopAudioDevice();
+  }
+
+  mute() {
+    RNReactNativePlivo.mute();
+  }
+
+  unmute() {
+    RNReactNativePlivo.unmute();
+  }
+
+  answer() {
+    RNReactNativePlivo.answer();
+  }
+
+  hangup() {
+    RNReactNativePlivo.hangup();
+  }
+
+  reject() {
+    RNReactNativePlivo.reject();
   }
 
   isLoggedIn() {

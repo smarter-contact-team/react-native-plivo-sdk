@@ -13,6 +13,12 @@ RCT_EXTERN_METHOD(call:(nonnull NSString *)dest
                     headers:(NSDictionary *)headers
                   )
 
+RCT_EXTERN_METHOD(mute)
+RCT_EXTERN_METHOD(unmute)
+RCT_EXTERN_METHOD(hangup)
+RCT_EXTERN_METHOD(reject)
+RCT_EXTERN_METHOD(answer)
+
 RCT_EXTERN_METHOD(configureAudioSession)
 
 RCT_EXTERN_METHOD(startAudioDevice)

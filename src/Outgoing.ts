@@ -1,26 +1,24 @@
 import RNReactNativePlivo from './RNReactNativePlivo';
 
 class Outgoing {
-  private _callUUID;
+  private callId;
 
-  constructor(callUUID?: string) {
-    this._callUUID = callUUID;
+  constructor(id?: string) {
+    this.callId = id;
   }
 
-  call() {}
-
   mute() {
-    RNReactNativePlivo.mute(this._callUUID);
+    RNReactNativePlivo.mute(this.callId);
   }
 
   unmute() {
-    RNReactNativePlivo.unmute(this._callUUID);
+    RNReactNativePlivo.unmute(this.callId);
   }
 
   sendDigits() {}
 
   hangup() {
-    RNReactNativePlivo.hangup(this._callUUID);
+    RNReactNativePlivo.hangup(this.callId);
   }
 }
 
