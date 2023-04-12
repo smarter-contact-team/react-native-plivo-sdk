@@ -1,6 +1,24 @@
-import Incoming from './Incoming';
-import Outgoing from './Outgoing';
-type Handler = (data: Incoming | Outgoing) => void;
+declare enum CallState {
+    DIALING = 0,
+    RINGING = 1,
+    ONGOING = 2,
+    TERMINATED = 3
+}
+interface PlivoLoginEvent {
+}
+interface PlivoOutgoingEvent {
+    callId: string;
+    state: CallState;
+    isOnHold: boolean;
+    muted: boolean;
+}
+interface PlivoIncomingEvent {
+    callId: string;
+    state: CallState;
+    isOnHold: boolean;
+    muted: boolean;
+}
+type Handler<T> = (data: T) => void;
 declare class EndPoint {
     private _isLoggedIn;
     call(phoneNumber: string, headers: Record<string, string>): any;
@@ -15,19 +33,19 @@ declare class EndPoint {
     hangup(): void;
     reject(): void;
     isLoggedIn(): boolean;
-    onLogin(handler: Handler): () => void;
-    onLoginFailed(handler: Handler): () => void;
-    onIncomingCall(handler: Handler): () => void;
-    onIncomingCallHangup(handler: Handler): () => void;
-    onIncomingCallRejected(handler: Handler): () => void;
-    onIncomingCallInvalid(handler: Handler): () => void;
-    onIncomingCallAnswered(handler: Handler): () => void;
-    onOutgoingCall(handler: Handler): () => void;
-    onOutgoingCallRinging(handler: Handler): () => void;
-    onOutgoingCallAnswered(handler: Handler): () => void;
-    onOutgoingCallRejected(handler: Handler): () => void;
-    onOutgoingCallHangup(handler: Handler): () => void;
-    onOutgoingCallInvalid(handler: Handler): () => void;
+    onLogin(handler: Handler<PlivoLoginEvent>): () => void;
+    onLoginFailed(handler: Handler<PlivoLoginEvent>): () => void;
+    onIncomingCall(handler: Handler<PlivoIncomingEvent>): () => void;
+    onIncomingCallHangup(handler: Handler<PlivoIncomingEvent>): () => void;
+    onIncomingCallRejected(handler: Handler<PlivoIncomingEvent>): () => void;
+    onIncomingCallInvalid(handler: Handler<PlivoIncomingEvent>): () => void;
+    onIncomingCallAnswered(handler: Handler<PlivoIncomingEvent>): () => void;
+    onOutgoingCall(handler: Handler<PlivoOutgoingEvent>): () => void;
+    onOutgoingCallRinging(handler: Handler<PlivoOutgoingEvent>): () => void;
+    onOutgoingCallAnswered(handler: Handler<PlivoOutgoingEvent>): () => void;
+    onOutgoingCallRejected(handler: Handler<PlivoOutgoingEvent>): () => void;
+    onOutgoingCallHangup(handler: Handler<PlivoOutgoingEvent>): () => void;
+    onOutgoingCallInvalid(handler: Handler<PlivoOutgoingEvent>): () => void;
 }
 export default EndPoint;
 //# sourceMappingURL=EndPoint.d.ts.map

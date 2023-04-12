@@ -1,7 +1,5 @@
 import RNReactNativePlivo from './RNReactNativePlivo';
 import { emitter } from './events';
-import Incoming from './Incoming';
-import Outgoing from './Outgoing';
 
 enum CallState {
   DIALING = 0,
@@ -9,6 +7,8 @@ enum CallState {
   ONGOING = 2,
   TERMINATED = 3,
 }
+
+interface PlivoLoginEvent {}
 
 interface PlivoOutgoingEvent {
   callId: string;
@@ -24,7 +24,7 @@ interface PlivoIncomingEvent {
   muted: boolean;
 }
 
-type Handler = (data: Incoming | Outgoing) => void;
+type Handler<T> = (data: T) => void;
 
 class EndPoint {
   private _isLoggedIn = false;
@@ -88,7 +88,7 @@ class EndPoint {
     return this._isLoggedIn;
   }
 
-  onLogin(handler: Handler) {
+  onLogin(handler: Handler<PlivoLoginEvent>) {
     const listener = emitter.addListener('Plivo-onLogin', (event) => {
       this._isLoggedIn = true;
 
@@ -97,95 +97,83 @@ class EndPoint {
     return () => listener.remove();
   }
 
-  onLoginFailed(handler: Handler) {
-    const listener = emitter.addListener('Plivo-onLoginFailed', (event) =>
-      handler(event)
-    );
+  onLoginFailed(handler: Handler<PlivoLoginEvent>) {
+    const listener = emitter.addListener('Plivo-onLoginFailed', handler);
     return () => listener.remove();
   }
 
-  onIncomingCall(handler: Handler) {
-    const listener = emitter.addListener(
-      'Plivo-onIncomingCall',
-      (event: PlivoIncomingEvent) => handler(new Incoming(event.callId))
-    );
+  onIncomingCall(handler: Handler<PlivoIncomingEvent>) {
+    const listener = emitter.addListener('Plivo-onIncomingCall', handler);
     return () => listener.remove();
   }
 
-  onIncomingCallHangup(handler: Handler) {
-    const listener = emitter.addListener(
-      'Plivo-onIncomingCallHangup',
-      (event: PlivoIncomingEvent) => handler(new Incoming(event.callId))
-    );
+  onIncomingCallHangup(handler: Handler<PlivoIncomingEvent>) {
+    const listener = emitter.addListener('Plivo-onIncomingCallHangup', handler);
     return () => listener.remove();
   }
 
-  onIncomingCallRejected(handler: Handler) {
+  onIncomingCallRejected(handler: Handler<PlivoIncomingEvent>) {
     const listener = emitter.addListener(
       'Plivo-onIncomingCallRejected',
-      (event: PlivoIncomingEvent) => handler(new Incoming(event.callId))
+      handler
     );
     return () => listener.remove();
   }
-  onIncomingCallInvalid(handler: Handler) {
+
+  onIncomingCallInvalid(handler: Handler<PlivoIncomingEvent>) {
     const listener = emitter.addListener(
       'Plivo-onIncomingCallInvalid',
-      (event: PlivoIncomingEvent) => handler(new Incoming(event.callId))
+      handler
     );
     return () => listener.remove();
   }
-  onIncomingCallAnswered(handler: Handler) {
+
+  onIncomingCallAnswered(handler: Handler<PlivoIncomingEvent>) {
     const listener = emitter.addListener(
       'Plivo-onIncomingCallAnswered',
-      (event: PlivoIncomingEvent) => handler(new Incoming(event.callId))
+      handler
     );
     return () => listener.remove();
   }
 
-  onOutgoingCall(handler: Handler) {
-    const listener = emitter.addListener(
-      'Plivo-onOutgoingCall',
-      (event: PlivoOutgoingEvent) => handler(new Outgoing(event.callId))
-    );
+  onOutgoingCall(handler: Handler<PlivoOutgoingEvent>) {
+    const listener = emitter.addListener('Plivo-onOutgoingCall', handler);
     return () => listener.remove();
   }
 
-  onOutgoingCallRinging(handler: Handler) {
+  onOutgoingCallRinging(handler: Handler<PlivoOutgoingEvent>) {
     const listener = emitter.addListener(
       'Plivo-onOutgoingCallRinging',
-      (event: PlivoOutgoingEvent) => handler(new Outgoing(event.callId))
+      handler
     );
     return () => listener.remove();
   }
 
-  onOutgoingCallAnswered(handler: Handler) {
+  onOutgoingCallAnswered(handler: Handler<PlivoOutgoingEvent>) {
     const listener = emitter.addListener(
       'Plivo-onOutgoingCallAnswered',
-      (event: PlivoOutgoingEvent) => handler(new Outgoing(event.callId))
+      handler
     );
     return () => listener.remove();
   }
 
-  onOutgoingCallRejected(handler: Handler) {
+  onOutgoingCallRejected(handler: Handler<PlivoOutgoingEvent>) {
     const listener = emitter.addListener(
       'Plivo-onOutgoingCallRejected',
-      (event: PlivoOutgoingEvent) => handler(new Outgoing(event.callId))
+      handler
     );
     return () => listener.remove();
   }
 
-  onOutgoingCallHangup(handler: Handler) {
-    const listener = emitter.addListener(
-      'Plivo-onOutgoingCallHangup',
-      (event: PlivoOutgoingEvent) => handler(new Outgoing(event.callId))
-    );
+  onOutgoingCallHangup(handler: Handler<PlivoOutgoingEvent>) {
+    const listener = emitter.addListener('Plivo-onOutgoingCallHangup', handler);
     return () => listener.remove();
   }
 
-  onOutgoingCallInvalid(handler: Handler) {
+  onOutgoingCallInvalid(handler: Handler<PlivoOutgoingEvent>) {
     const listener = emitter.addListener(
       'Plivo-onOutgoingCallInvalid',
-      (event: PlivoOutgoingEvent) => handler(new Outgoing(event.callId))
+      handler
     );
     return () => listener.remove();
   }
