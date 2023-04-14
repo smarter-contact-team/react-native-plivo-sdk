@@ -22,7 +22,7 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["Plivo-onIncomingCall", "Plivo-onLogin", "Plivo-onLoginFailed", "Plivo-onLogout", "Plivo-onIncomingCallHangup", "Plivo-onIncomingCallRejected", "Plivo-onOutgoingCall", "Plivo-onOutgoingCallAnswered", "Plivo-onOutgoingCallRinging", "Plivo-onOutgoingCallRejected", "Plivo-onOutgoingCallHangup", "Plivo-onOutgoingCallInvalid" ]
+        return ["Plivo-onIncomingCall", "Plivo-onLogin", "Plivo-onLoginFailed", "Plivo-onLogout", "Plivo-onIncomingCallHangup", "Plivo-onIncomingCallRejected", "Plivo-onIncomingCallAnswered", "Plivo-onIncomingCallInvalid", "Plivo-onOutgoingCall", "Plivo-onOutgoingCallAnswered", "Plivo-onOutgoingCallRinging", "Plivo-onOutgoingCallRejected", "Plivo-onOutgoingCallHangup", "Plivo-onOutgoingCallInvalid" ]
     }
 
     override func startObserving() {
@@ -53,6 +53,11 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
         -> Void {
             let tokenData = Data(token.utf8);
             endpoint.login(userName, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
+    }
+
+    @objc(logout)
+    func logout() {
+        endpoint.logout()
     }
 
     @objc(call:headers:)
@@ -141,6 +146,10 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
 
     func onLoginFailed() {
         sendEvent(withName: "Plivo-onLoginFailed", body:nil);
+    }
+
+    func onLogout() {
+        sendEvent(withName: "Plivo-onLogout", body:nil);
     }
 
     func onLoginFailedWithError(_ error: Error!) {

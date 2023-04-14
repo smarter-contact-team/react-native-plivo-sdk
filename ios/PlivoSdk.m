@@ -8,6 +8,7 @@ RCT_EXTERN_METHOD(login:(nonnull NSString *)userName
                   token:(nonnull NSString *)token
                   certificateId:(nonnull NSString *)certificateId
                   )
+RCT_EXTERN_METHOD(logout)
 
 RCT_EXTERN_METHOD(call:(nonnull NSString *)dest
                     headers:(NSDictionary *)headers
