@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -33,12 +34,12 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
     private Incoming incomingCall;
     private Outgoing outgoingCall;
 
-    public static HashMap < String, Object > options = new HashMap < String, Object > () {
+    public static HashMap<String, Object> options = new HashMap<String, Object>() {
         {
             put("debug", true);
             put("enableTracking", true);
-            put("maxAverageBitrate", 21000);
-        } };
+        }
+    };
 
     public PlivoSdkModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -49,12 +50,15 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
     @Override
     @NonNull
     public String getName() {
-      return NAME;
+        return NAME;
     }
 
     private void sendEvent(ReactContext reactContext,
                            String eventName,
                            @Nullable WritableMap params) {
+
+        Log.w(PlivoSdkModule.NAME, "sendEvent: " + eventName);
+
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
@@ -72,11 +76,17 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
 
     @ReactMethod
     public void call(String phoneNumber, ReadableMap headers) {
-      Map<String, String> extraHeaders = new HashMap<>();
-      extraHeaders.put("X-PH-destNumber", headers.getString("destNumber"));
+        Map<String, String> extraHeaders = new HashMap<>();
 
-      Outgoing outgoing = endpoint.createOutgoingCall();
-      outgoing.call(phoneNumber, extraHeaders);
+        ReadableMapKeySetIterator iterator = headers.keySetIterator();
+        while (iterator.hasNextKey()) {
+            String key = iterator.nextKey();
+
+            extraHeaders.put(key, headers.getString(key));
+        }
+
+        Outgoing outgoing = endpoint.createOutgoingCall();
+        outgoing.call(phoneNumber, extraHeaders);
     }
 
     @ReactMethod
@@ -84,7 +94,7 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
         if (incomingCall != null) {
             incomingCall.answer();
         } else {
-            Log.w("PLIVO_ANSWER", "Incoming call is not exist in incomingMap");
+            Log.w(PlivoSdkModule.NAME, "Incoming call is not exist in incomingMap");
         }
     }
 
@@ -93,7 +103,7 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
         if (incomingCall != null) {
             incomingCall.reject();
         } else {
-            Log.w("PLIVO_REJECT", "Incoming call is not exist in incomingMap");
+            Log.w(PlivoSdkModule.NAME, "Incoming call is not exist in incomingMap");
         }
     }
 
@@ -121,7 +131,7 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
         }
     }
 
-    @ReactMethod
+
     public void hangup() {
         if (incomingCall != null) {
             incomingCall.hangup();
@@ -131,6 +141,21 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
         if (outgoingCall != null) {
             outgoingCall.hangup();
         }
+    }
+
+    @ReactMethod
+    public void startAudioDevice() {
+        Log.w(PlivoSdkModule.NAME, "startAudioDevice stub");
+    }
+
+    @ReactMethod
+    public void stopAudioDevice() {
+        Log.w(PlivoSdkModule.NAME, "stopAudioDevice stub");
+    }
+
+    @ReactMethod
+    public void configureAudioSession() {
+        Log.w(PlivoSdkModule.NAME, "configureAudioSession stub");
     }
 
     @Override
@@ -186,9 +211,9 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
 
     @Override
     public void onIncomingCallInvalid(Incoming incoming) {
-          WritableMap params = Arguments.createMap();
-          params.putString("callId", incoming.getCallId());
-          sendEvent(reactContext, "Plivo-onIncomingCallInvalid", params);
+        WritableMap params = Arguments.createMap();
+        params.putString("callId", incoming.getCallId());
+        sendEvent(reactContext, "Plivo-onIncomingCallInvalid", params);
     }
 
     @Override

@@ -67,6 +67,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation 'com.plivo.endpoint:endpoint:3.0.3-beta.2'
+  implementation 'org.webrtc:google-webrtc:1.0.32006'
 }
 
 if (isNewArchitectureEnabled()) {
