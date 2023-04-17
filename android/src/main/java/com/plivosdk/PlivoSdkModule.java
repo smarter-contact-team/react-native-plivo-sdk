@@ -3,23 +3,14 @@ package com.plivosdk;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 
 import com.facebook.react.module.annotations.ReactModule;
-
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -27,6 +18,7 @@ import com.plivo.endpoint.Endpoint;
 import com.plivo.endpoint.EventListener;
 import com.plivo.endpoint.Incoming;
 import com.plivo.endpoint.Outgoing;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,10 +33,17 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
     private Incoming incomingCall;
     private Outgoing outgoingCall;
 
+    public static HashMap < String, Object > options = new HashMap < String, Object > () {
+        {
+            put("debug", true);
+            put("enableTracking", true);
+            put("maxAverageBitrate", 21000);
+        } };
+
     public PlivoSdkModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        endpoint = new Endpoint(true, this);
+        endpoint = Endpoint.newInstance(reactContext, true, this, options);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
       extraHeaders.put("X-PH-destNumber", headers.getString("destNumber"));
 
       Outgoing outgoing = endpoint.createOutgoingCall();
-      outgoing.callH(phoneNumber, extraHeaders);
+      outgoing.call(phoneNumber, extraHeaders);
     }
 
     @ReactMethod
@@ -150,10 +149,25 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
     }
 
     @Override
+    public void onLoginFailed(String message) {
+
+    }
+
+    @Override
+    public void onIncomingDigitNotification(String s) {
+
+    }
+
+    @Override
     public void onIncomingCall(Incoming incoming) {
         WritableMap params = Arguments.createMap();
         params.putString("callId", incoming.getCallId());
         sendEvent(reactContext, "Plivo-onIncomingCall", params);
+    }
+
+    @Override
+    public void onIncomingCallConnected(Incoming incoming) {
+
     }
 
     @Override
@@ -217,5 +231,15 @@ public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventL
         WritableMap params = Arguments.createMap();
         params.putString("callId", outgoing.getCallId());
         sendEvent(reactContext, "Plivo-onOutgoingCallInvalid", params);
+    }
+
+    @Override
+    public void mediaMetrics(HashMap hashMap) {
+
+    }
+
+    @Override
+    public void onPermissionDenied(String message) {
+
     }
 }
