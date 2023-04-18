@@ -19,10 +19,10 @@ interface PlivoIncomingEvent {
     muted: boolean;
 }
 type Handler<T> = (data: T) => void;
-declare class EndPoint {
+export declare class PlivoClient {
     private _isLoggedIn;
-    call(phoneNumber: string, headers: Record<string, string>): any;
     login(username: string, password: string, fcmToken: string, certificateId: string): any;
+    call(phoneNumber: string, headers: Record<string, string>): any;
     logout(): void;
     configureAudioSession(): void;
     startAudioDevice(): void;
@@ -47,5 +47,5 @@ declare class EndPoint {
     onOutgoingCallHangup(handler: Handler<PlivoOutgoingEvent>): () => void;
     onOutgoingCallInvalid(handler: Handler<PlivoOutgoingEvent>): () => void;
 }
-export default EndPoint;
-//# sourceMappingURL=EndPoint.d.ts.map
+export {};
+//# sourceMappingURL=PlivoClient.d.ts.map

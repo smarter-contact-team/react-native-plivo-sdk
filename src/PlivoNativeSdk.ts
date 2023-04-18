@@ -6,7 +6,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const Plivo = NativeModules.PlivoSdk
+export const PlivoNativeSdk = NativeModules.PlivoSdk
   ? NativeModules.PlivoSdk
   : new Proxy(
       {},
@@ -16,5 +16,3 @@ const Plivo = NativeModules.PlivoSdk
         },
       }
     );
-
-export default Plivo;

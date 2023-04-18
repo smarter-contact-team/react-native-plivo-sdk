@@ -1,1 +1,1 @@
-{"version":3,"names":["NativeEventEmitter","RNReactNativePlivo","emitter"],"sourceRoot":"../../src","sources":["events.ts"],"mappings":"AAAA,SAASA,kBAAkB,QAAQ,cAAc;AAEjD,OAAOC,kBAAkB,MAAM,sBAAsB;AAErD,OAAO,MAAMC,OAAO,GAAG,IAAIF,kBAAkB,CAACC,kBAAkB,CAAC"}
+{"version":3,"names":["NativeEventEmitter","PlivoNativeSdk","emitter"],"sourceRoot":"../../src","sources":["events.ts"],"mappings":"AAAA,SAASA,kBAAkB,QAAQ,cAAc;AAEjD,SAASC,cAAc,QAAQ,kBAAkB;AAEjD,OAAO,MAAMC,OAAO,GAAG,IAAIF,kBAAkB,CAACC,cAAc,CAAC"}

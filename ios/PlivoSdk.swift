@@ -22,7 +22,22 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["Plivo-onIncomingCall", "Plivo-onLogin", "Plivo-onLoginFailed", "Plivo-onLogout", "Plivo-onIncomingCallHangup", "Plivo-onIncomingCallRejected", "Plivo-onIncomingCallAnswered", "Plivo-onIncomingCallInvalid", "Plivo-onOutgoingCall", "Plivo-onOutgoingCallAnswered", "Plivo-onOutgoingCallRinging", "Plivo-onOutgoingCallRejected", "Plivo-onOutgoingCallHangup", "Plivo-onOutgoingCallInvalid" ]
+        return [
+            "Plivo-onLogin",
+            "Plivo-onLoginFailed",
+            "Plivo-onLogout",
+            "Plivo-onIncomingCall",
+            "Plivo-onIncomingCallHangup",
+            "Plivo-onIncomingCallRejected",
+            "Plivo-onIncomingCallAnswered",
+            "Plivo-onIncomingCallInvalid",
+            "Plivo-onOutgoingCall",
+            "Plivo-onOutgoingCallAnswered",
+            "Plivo-onOutgoingCallRinging",
+            "Plivo-onOutgoingCallRejected",
+            "Plivo-onOutgoingCallHangup",
+            "Plivo-onOutgoingCallInvalid"
+        ]
     }
 
     override func startObserving() {

@@ -1,5 +1,5 @@
 import { NativeEventEmitter } from 'react-native';
 
-import RNReactNativePlivo from './RNReactNativePlivo';
+import { PlivoNativeSdk } from './PlivoNativeSdk';
 
-export const emitter = new NativeEventEmitter(RNReactNativePlivo);
+export const emitter = new NativeEventEmitter(PlivoNativeSdk);

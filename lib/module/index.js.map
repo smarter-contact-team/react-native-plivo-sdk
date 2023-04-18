@@ -1,1 +1,1 @@
-{"version":3,"names":["EndPoint","Plivo"],"sourceRoot":"../../src","sources":["index.ts"],"mappings":"AAAA,OAAOA,QAAQ,MAAM,YAAY;AAEjC,MAAMC,KAAK,GAAG,IAAID,QAAQ,EAAE;AAE5B,eAAeC,KAAK"}
+{"version":3,"names":["PlivoClient"],"sourceRoot":"../../src","sources":["index.ts"],"mappings":"AAAA,SAASA,WAAW,QAAQ,eAAe;AAE3C,eAAe,IAAIA,WAAW,EAAE"}

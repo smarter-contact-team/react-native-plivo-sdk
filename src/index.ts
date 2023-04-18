@@ -1,5 +1,3 @@
-import EndPoint from './EndPoint';
+import { PlivoClient } from './PlivoClient';
 
-const Plivo = new EndPoint();
-
-export default Plivo;
+export default new PlivoClient();
