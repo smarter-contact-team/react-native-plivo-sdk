@@ -89,7 +89,7 @@ export class PlivoClient {
   }
 
   onLogin(handler: Handler<PlivoLoginEvent>) {
-    return createListener('onLoginFailed', (event: PlivoLoginEvent) => {
+    return createListener('onLogin', (event: PlivoLoginEvent) => {
       this._isLoggedIn = true;
 
       handler(event);
