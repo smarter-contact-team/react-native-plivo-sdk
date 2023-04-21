@@ -63,10 +63,12 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
         withUserName userName: String,
         andPassword password: String,
         deviceToken token: String,
-        certificateId certificateId: String
+        certificateId: String
         )
         -> Void {
-            let tokenData = Data(token.utf8);
+            // converrt hex string token to Data
+            let tokenData: Data = Data(convertHex(token.unicodeScalars, i: token.unicodeScalars.startIndex, appendTo: []))
+
             endpoint.login(userName, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
     }
 
