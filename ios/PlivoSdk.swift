@@ -57,6 +57,9 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
         super.stopObserving()
     }
 
+    @objc func relayVoipPushNotification(pushInfo: [AnyHashable : Any]) {
+        endpoint?.relayVoipPushNotification(pushInfo)
+    }
 
     @objc(login:password:token:certificateId:)
     func login(
