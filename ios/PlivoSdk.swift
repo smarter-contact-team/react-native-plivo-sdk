@@ -3,10 +3,10 @@ import Foundation
 import PlivoVoiceKit
 
 @objc(PlivoSdk)
-class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
+final class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
     private var hasListeners : Bool = false
 
-    private var endpoint: PlivoEndpoint = PlivoEndpoint.init(["debug" : true, "enableTracking":true])
+    private var endpoint: PlivoEndpoint? = PlivoEndpoint(["debug" : true, "enableTracking":true])
 
     private var incomingCall: PlivoIncoming?
     private var outgoingCall: PlivoOutgoing?
@@ -14,7 +14,7 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
     override init() {
         print("PlivoSdk ReactNativeEventEmitter init")
         super.init()
-        endpoint.delegate = self
+        endpoint?.delegate = self
     }
 
     override static func requiresMainQueueSetup() -> Bool {
@@ -68,17 +68,17 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
         -> Void {
             // converrt hex string token to Data
             let tokenData: Data = Data(convertHex(token.unicodeScalars, i: token.unicodeScalars.startIndex, appendTo: []))
-
-            endpoint.login(userName, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
+            
+            endpoint?.login(userName, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
     }
 
     @objc(logout)
     func logout() {
-        endpoint.logout()
+        endpoint?.logout()
     }
 
     @objc(call:headers:)
-    func call(withDest dest: String, andHeaders headers: [AnyHashable: Any]) -> PlivoOutgoing {
+    func call(withDest dest: String, andHeaders headers: [AnyHashable: Any]) -> PlivoOutgoing? {
         var error: NSError?
 
         let domain: String = "@phone.plivo.com"
@@ -86,25 +86,25 @@ class PlivoSdk: RCTEventEmitter, PlivoEndpointDelegate {
         /* construct SIP URI , where kENDPOINTURL is a contant contaning domain name details*/
         let sipUri: String = "sip:\(dest)\(domain)"
 
-        outgoingCall = (endpoint.createOutgoingCall())!
+        outgoingCall = endpoint?.createOutgoingCall()
         outgoingCall?.call(sipUri, headers: headers, error: &error)
 
-        return outgoingCall!
+        return outgoingCall
     }
 
     @objc(configureAudioSession)
     func configureAudioSession() {
-        endpoint.configureAudioDevice()
+        endpoint?.configureAudioDevice()
     }
 
     @objc(startAudioDevice)
     func startAudioDevice() {
-        endpoint.startAudioDevice()
+        endpoint?.startAudioDevice()
     }
 
     @objc(stopAudioDevice)
     func stopAudioDevice() {
-        endpoint.stopAudioDevice()
+        endpoint?.stopAudioDevice()
     }
 
     @objc(mute)
