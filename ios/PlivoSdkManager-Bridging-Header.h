@@ -3,8 +3,8 @@
 #import <React/RCTEventEmitter.h>
 #import <React/RCTViewManager.h>
 
-@interface PlivoSdk : RCTEventEmitter <RCTBridgeModule>
+@interface PlivoSdkManager : RCTEventEmitter <RCTBridgeModule>
 
-- (void)relayVoipPushNotification:(NSDictionary *)pushInfo;
++ (void)relayVoipPushNotification:(NSDictionary *)pushInfo;
 
 @end

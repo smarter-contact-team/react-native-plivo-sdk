@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E555C0D2413F4C50049A1A2 /* PlivoSdk.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* PlivoSdk.m */; };
-		F4FF95D7245B92E800C19C63 /*  PlivoSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /*  PlivoSdk.swift */; };
+		2EFDC69C2A08BBA300A1DAB7 /* PlivoSdkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDC6992A08BBA300A1DAB7 /* PlivoSdkManager.swift */; };
+		2EFDC69D2A08BBA300A1DAB7 /* PlivoSdkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDC69A2A08BBA300A1DAB7 /* PlivoSdkManager.m */; };
+		2EFDC69F2A08BBAD00A1DAB7 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDC69E2A08BBAC00A1DAB7 /* Helpers.swift */; };
+		F4FF95D7245B92E800C19C63 /* PlivoSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* PlivoSdk.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,8 +27,10 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libPlivoSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlivoSdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E7B5891CC2AC0600A0062D /* PlivoSdk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlivoSdk.m; sourceTree = "<group>"; };
-		F4FF95D5245B92E700C19C63 /* PlivoSdk-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PlivoSdk-Bridging-Header.h"; sourceTree = "<group>"; };
+		2EFDC6992A08BBA300A1DAB7 /* PlivoSdkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlivoSdkManager.swift; sourceTree = "<group>"; };
+		2EFDC69A2A08BBA300A1DAB7 /* PlivoSdkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlivoSdkManager.m; sourceTree = "<group>"; };
+		2EFDC69B2A08BBA300A1DAB7 /* PlivoSdkManager-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PlivoSdkManager-Bridging-Header.h"; sourceTree = "<group>"; };
+		2EFDC69E2A08BBAC00A1DAB7 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* PlivoSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlivoSdk.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,9 +56,11 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				2EFDC69E2A08BBAC00A1DAB7 /* Helpers.swift */,
 				F4FF95D6245B92E800C19C63 /* PlivoSdk.swift */,
-				B3E7B5891CC2AC0600A0062D /* PlivoSdk.m */,
-				F4FF95D5245B92E700C19C63 /* PlivoSdk-Bridging-Header.h */,
+				2EFDC69B2A08BBA300A1DAB7 /* PlivoSdkManager-Bridging-Header.h */,
+				2EFDC69A2A08BBA300A1DAB7 /* PlivoSdkManager.m */,
+				2EFDC6992A08BBA300A1DAB7 /* PlivoSdkManager.swift */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,7 +123,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4FF95D7245B92E800C19C63 /* PlivoSdk.swift in Sources */,
-				B3E7B58A1CC2AC0600A0062D /* PlivoSdk.m in Sources */,
+				2EFDC69D2A08BBA300A1DAB7 /* PlivoSdkManager.m in Sources */,
+				2EFDC69C2A08BBA300A1DAB7 /* PlivoSdkManager.swift in Sources */,
+				2EFDC69F2A08BBAD00A1DAB7 /* Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,7 +1,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(PlivoSdk,  NSObject)
+@interface RCT_EXTERN_MODULE(PlivoSdkManager,  NSObject)
 
 RCT_EXTERN_METHOD(login:(nonnull NSString *)userName
                   password:(nonnull NSString *)password
