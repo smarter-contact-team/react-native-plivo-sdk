@@ -1,6 +1,7 @@
 import React
 import Foundation
 import PlivoVoiceKit
+import Security
 
 protocol PlivoSdkDelegate: AnyObject {
     // Login
@@ -24,7 +25,6 @@ protocol PlivoSdkDelegate: AnyObject {
 }
 
 
-@objc(PlivoSdk)
 final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     static let shared = PlivoSdk()
 
@@ -50,11 +50,13 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
         -> Void {
             // converrt hex string token to Data
             let tokenData: Data = Data(convertHex(token.unicodeScalars, i: token.unicodeScalars.startIndex, appendTo: []))
-            
+
+            saveCredentials(userName, password, token, certificateId)
             endpoint?.login(userName, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
     }
 
     func logout() {
+        deleteCredentials()
         endpoint?.logout()
     }
 
@@ -122,7 +124,7 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
         if (incomingCall != nil) {
             incomingCall?.hangup()
-            outgoingCall = nil
+            incomingCall = nil
         }
     }
 
@@ -183,7 +185,6 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     func onIncomingCallHangup(_ incoming: PlivoIncoming!) {
-        incomingCall = nil;
         delegate?.onIncomingCallHangup(convertIncomintCallToObject(incoming))
     }
 
@@ -201,7 +202,7 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
     private func convertOutgoingCallToObject(_ call: PlivoOutgoing!) -> [String: Any] {
         let body: [String: Any] = [
-            "callId": call.callId,
+            "callId": call.callId ?? "",
             "state": call.state.rawValue,
             "muted": call.muted,
             "isOnHold": call.isOnHold
@@ -212,7 +213,8 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
     private func convertIncomintCallToObject(_ call: PlivoIncoming!) -> [String: Any] {
         let body: [String: Any] = [
-            "callId": call.callId,
+            "callId": call.extraHeaders["X-PH-Original-Call-Id"] ?? "",
+            "from": call.extraHeaders["X-PH-Contact"] ?? "",
             "state": call.state.rawValue,
             "muted": call.muted,
             "isOnHold": call.isOnHold
@@ -220,5 +222,4 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
         return body;
     }
-    
 }

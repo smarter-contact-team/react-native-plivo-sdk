@@ -5,6 +5,11 @@
 
 @interface PlivoSdkManager : RCTEventEmitter <RCTBridgeModule>
 
++ (void)loginWithUsername:(NSString *)username
+                 password:(NSString *)password
+              deviceToken:(NSString *)deviceToken
+            certificateId:(NSString *)certificateId;
+
 + (void)relayVoipPushNotification:(NSDictionary *)pushInfo;
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2EDD2B6B2A0CDF7100C57DE7 /* PlivoSdk+Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDD2B6A2A0CDF7100C57DE7 /* PlivoSdk+Keychain.swift */; };
 		2EFDC69C2A08BBA300A1DAB7 /* PlivoSdkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDC6992A08BBA300A1DAB7 /* PlivoSdkManager.swift */; };
 		2EFDC69D2A08BBA300A1DAB7 /* PlivoSdkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDC69A2A08BBA300A1DAB7 /* PlivoSdkManager.m */; };
 		2EFDC69F2A08BBAD00A1DAB7 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDC69E2A08BBAC00A1DAB7 /* Helpers.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libPlivoSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPlivoSdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EDD2B6A2A0CDF7100C57DE7 /* PlivoSdk+Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlivoSdk+Keychain.swift"; sourceTree = "<group>"; };
 		2EFDC6992A08BBA300A1DAB7 /* PlivoSdkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlivoSdkManager.swift; sourceTree = "<group>"; };
 		2EFDC69A2A08BBA300A1DAB7 /* PlivoSdkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlivoSdkManager.m; sourceTree = "<group>"; };
 		2EFDC69B2A08BBA300A1DAB7 /* PlivoSdkManager-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PlivoSdkManager-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			children = (
 				2EFDC69E2A08BBAC00A1DAB7 /* Helpers.swift */,
 				F4FF95D6245B92E800C19C63 /* PlivoSdk.swift */,
+				2EDD2B6A2A0CDF7100C57DE7 /* PlivoSdk+Keychain.swift */,
 				2EFDC69B2A08BBA300A1DAB7 /* PlivoSdkManager-Bridging-Header.h */,
 				2EFDC69A2A08BBA300A1DAB7 /* PlivoSdkManager.m */,
 				2EFDC6992A08BBA300A1DAB7 /* PlivoSdkManager.swift */,
@@ -124,6 +127,7 @@
 			files = (
 				F4FF95D7245B92E800C19C63 /* PlivoSdk.swift in Sources */,
 				2EFDC69D2A08BBA300A1DAB7 /* PlivoSdkManager.m in Sources */,
+				2EDD2B6B2A0CDF7100C57DE7 /* PlivoSdk+Keychain.swift in Sources */,
 				2EFDC69C2A08BBA300A1DAB7 /* PlivoSdkManager.swift in Sources */,
 				2EFDC69F2A08BBAD00A1DAB7 /* Helpers.swift in Sources */,
 			);
