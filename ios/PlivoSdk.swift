@@ -110,12 +110,14 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
         }
     }
 
+    // answer incoming call
     func answer() {
         if (incomingCall != nil) {
             incomingCall?.answer()
         }
     }
 
+    // hangup ONGOING call
     func hangup() {
         if (outgoingCall != nil) {
             outgoingCall?.hangup()
@@ -128,6 +130,7 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
         }
     }
 
+    // reject incoming call
     func reject() {
         if (incomingCall != nil) {
             incomingCall?.reject()
@@ -154,6 +157,8 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     //    onOutgoingCalling
     func onCalling(_ call: PlivoOutgoing!) {
         outgoingCall = call;
+        configureAudioSession()
+        startAudioDevice()
     }
 
     func onOutgoingCallRejected(_ outgoing: PlivoOutgoing) {
@@ -180,24 +185,28 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
     func onIncomingCall(_ incoming: PlivoIncoming!) {
         incomingCall = incoming
-
-        delegate?.onIncomingCall(convertIncomintCallToObject(incoming))
-    }
-
-    func onIncomingCallHangup(_ incoming: PlivoIncoming!) {
-        delegate?.onIncomingCallHangup(convertIncomintCallToObject(incoming))
+        configureAudioSession()
+        delegate?.onIncomingCall(convertIncomingCallToObject(incoming))
     }
 
     func onIncomingCallAnswered(_ incoming: PlivoIncoming!) {
-        delegate?.onIncomingCallAnswered(convertIncomintCallToObject(incoming))
-    }
-
-    func onIncomingCallInvalid(_ incoming: PlivoIncoming!) {
-        delegate?.onIncomingCallInvalid(convertIncomintCallToObject(incoming))
+        startAudioDevice()
+        delegate?.onIncomingCallAnswered(convertIncomingCallToObject(incoming))
     }
 
     func onIncomingCallRejected(_ incoming: PlivoIncoming!) {
-        delegate?.onIncomingCallRejected(convertIncomintCallToObject(incoming))
+        delegate?.onIncomingCallRejected(convertIncomingCallToObject(incoming))
+        incomingCall = nil
+    }
+
+    func onIncomingCallHangup(_ incoming: PlivoIncoming!) {
+        delegate?.onIncomingCallHangup(convertIncomingCallToObject(incoming))
+        incomingCall = nil
+        stopAudioDevice()
+    }
+
+    func onIncomingCallInvalid(_ incoming: PlivoIncoming!) {
+        delegate?.onIncomingCallInvalid(convertIncomingCallToObject(incoming))
     }
 
     private func convertOutgoingCallToObject(_ call: PlivoOutgoing!) -> [String: Any] {
@@ -211,9 +220,14 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
         return body;
     }
 
-    private func convertIncomintCallToObject(_ call: PlivoIncoming!) -> [String: Any] {
+    private func convertIncomingCallToObject(_ call: PlivoIncoming!) -> [String: Any] {
+        // callId comes with extra characters in method onIncomingCall(_ incoming: PlivoIncoming!)
+        // ": 86414ebc-997b-4c9e-a905-bf4b37180430" instead of "86414ebc-997b-4c9e-a905-bf4b37180430"
+        let callIdWithExtra = call.extraHeaders["X-PH-Original-Call-Id"] as? String
+        let correctCallId = callIdWithExtra?.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: " ", with: "")
+
         let body: [String: Any] = [
-            "callId": call.extraHeaders["X-PH-Original-Call-Id"] ?? "",
+            "callId": correctCallId ?? "",
             "from": call.extraHeaders["X-PH-Contact"] ?? "",
             "state": call.state.rawValue,
             "muted": call.muted,
