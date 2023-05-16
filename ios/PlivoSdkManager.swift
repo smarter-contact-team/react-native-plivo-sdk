@@ -52,6 +52,14 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
         super.stopObserving()
     }
 
+    @objc static func login(username: String, password: String, deviceToken: String, certificateId: String) {
+        PlivoSdk.shared.login(withUserName: username, andPassword: password, deviceToken: deviceToken, certificateId: certificateId)
+    }
+
+    @objc static func relayVoipPushNotification(_ pushInfo: [AnyHashable : Any]) {
+        PlivoSdk.shared.relayVoipPushNotification(pushInfo: pushInfo)
+    }
+
     @objc(login:password:token:certificateId:)
     func login(
         withUserName userName: String,
@@ -60,18 +68,14 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
         certificateId: String
         )
         -> Void {
-            shared.login(withUserName: userName,
-                         andPassword: password,
-                         deviceToken: token,
-                         certificateId: certificateId)
+            PlivoSdk.shared.login(withUserName: userName,
+                                  andPassword: password,
+                                  deviceToken: token,
+                                  certificateId: certificateId)
     }
 
     @objc func logout() {
         shared.logout()
-    }
-
-    @objc static func relayVoipPushNotification(_ pushInfo: [AnyHashable : Any]) {
-        PlivoSdk.shared.relayVoipPushNotification(pushInfo: pushInfo)
     }
 
     @objc(call:headers:)
@@ -168,8 +172,6 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
     func onIncomingCallRejected(_ data: [String: Any]) {
         sendEvent(withName: "Plivo-onIncomingCallRejected", body: data);
     }
-
-    
 }
 
 
