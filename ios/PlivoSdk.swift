@@ -30,6 +30,10 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
     weak var delegate: PlivoSdkDelegate?
 
+    private let credentialsManager = CredentialsManager()
+    private var isLoggedIn: Bool = false
+    private var pendingPushInfo: [AnyHashable : Any]?
+
     private var endpoint: PlivoEndpoint? = PlivoEndpoint(["debug" : true, "enableTracking":true])
 
     private var incomingCall: PlivoIncoming?
@@ -51,17 +55,28 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
             // converrt hex string token to Data
             let tokenData: Data = Data(convertHex(token.unicodeScalars, i: token.unicodeScalars.startIndex, appendTo: []))
 
-            saveCredentials(userName, password, token, certificateId)
+            credentialsManager.saveCredentials(userName, password, token, certificateId)
             endpoint?.login(userName, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
     }
 
     func logout() {
-        deleteCredentials()
+        credentialsManager.deleteCredentials()
         endpoint?.logout()
     }
 
     func relayVoipPushNotification(pushInfo: [AnyHashable : Any]) {
-        endpoint?.relayVoipPushNotification(pushInfo)
+        if isLoggedIn {
+            endpoint?.relayVoipPushNotification(pushInfo)
+        } else {
+            pendingPushInfo = pushInfo
+
+            if let username = credentialsManager.username,
+               let password = credentialsManager.password,
+               let deviceToken = credentialsManager.deviceToken,
+               let certificatedId = credentialsManager.certificateId {
+                login(withUserName: username, andPassword: password, deviceToken: deviceToken, certificateId: certificatedId)
+            }
+        }
     }
 
     func call(withDest dest: String, andHeaders headers: [AnyHashable: Any]) -> PlivoOutgoing? {
@@ -140,6 +155,11 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
     func onLogin() {
         delegate?.onLogin()
+        isLoggedIn = true
+        if let pushInfo = pendingPushInfo {
+            endpoint?.relayVoipPushNotification(pushInfo)
+            pendingPushInfo = nil
+        }
     }
 
     func onLoginFailed() {

@@ -4,6 +4,7 @@ import PlivoVoiceKit
 @objc(PlivoSdkManager)
 final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
     private let shared = PlivoSdk.shared
+
     private var hasListeners : Bool = false
 
     override init() {
@@ -50,10 +51,6 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
         hasListeners = false
 
         super.stopObserving()
-    }
-
-    @objc static func login(username: String, password: String, deviceToken: String, certificateId: String) {
-        PlivoSdk.shared.login(withUserName: username, andPassword: password, deviceToken: deviceToken, certificateId: certificateId)
     }
 
     @objc static func relayVoipPushNotification(_ pushInfo: [AnyHashable : Any]) {
