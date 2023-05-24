@@ -1,6 +1,7 @@
 import React
 import Foundation
 import PlivoVoiceKit
+import Security
 
 protocol PlivoSdkDelegate: AnyObject {
     // Login

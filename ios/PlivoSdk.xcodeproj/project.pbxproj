@@ -128,6 +128,7 @@
 				2EE9718E2A1DE79700B6E5CB /* CredentialsManager.swift in Sources */,
 				F4FF95D7245B92E800C19C63 /* PlivoSdk.swift in Sources */,
 				2EFDC69D2A08BBA300A1DAB7 /* PlivoSdkManager.m in Sources */,
+				2EDD2B6B2A0CDF7100C57DE7 /* PlivoSdk+Keychain.swift in Sources */,
 				2EFDC69C2A08BBA300A1DAB7 /* PlivoSdkManager.swift in Sources */,
 				2EFDC69F2A08BBAD00A1DAB7 /* Helpers.swift in Sources */,
 			);
