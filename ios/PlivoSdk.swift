@@ -241,21 +241,24 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     private func convertIncomingCallToObject(_ call: PlivoIncoming!) -> [String: Any] {
-        // callId comes with extra characters in method onIncomingCall(_ incoming: PlivoIncoming!)
-        // ": 86414ebc-997b-4c9e-a905-bf4b37180430" instead of "86414ebc-997b-4c9e-a905-bf4b37180430"
-        let callIdWithExtra = call.extraHeaders["X-PH-Original-Call-Id"] as? String
-        let correctCallId = callIdWithExtra?.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: " ", with: "")
+          let callId = call.extraHeaders["X-PH-Original-Call-Id"] as? String;
+          let callerName = call.extraHeaders["X-PH-Contact"] as? String;
+          let callerId = call.extraHeaders["X-PH-Contact-Id"] as? String;
 
-        let body: [String: Any] = [
-            "callId": correctCallId ?? "",
-            "callerPhone": call.fromUser ?? "",
-            "callerName": call.extraHeaders["X-PH-Contact"] ?? "",
-            "callerId": call.extraHeaders["X-PH-Contact-Id"] ?? "",
-            "state": call.state.rawValue,
-            "muted": call.muted,
-            "isOnHold": call.isOnHold
-        ];
+          let body: [String: Any] = [
+              "callId": normalizeHeaderValue(value:callId) ?? "",
+              "callerPhone": call.fromUser ?? "",
+              "callerName": normalizeHeaderValue(value:callerName) ?? "",
+              "callerId": normalizeHeaderValue(value:callerId) ?? "",
+              "state": call.state.rawValue,
+              "muted": call.muted,
+              "isOnHold": call.isOnHold
+          ];
 
-        return body;
-    }
+          return body;
+      }
+
+      private func normalizeHeaderValue(value: String?) -> String? {
+          return value?.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: " ", with: "")
+      }
 }
