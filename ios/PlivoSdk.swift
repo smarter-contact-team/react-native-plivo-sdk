@@ -248,7 +248,9 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
         let body: [String: Any] = [
             "callId": correctCallId ?? "",
-            "from": call.extraHeaders["X-PH-Contact"] ?? "",
+            "callerPhone": call.fromUser ?? "",
+            "callerName": call.extraHeaders["X-PH-Contact"] ?? "",
+            "callerId": call.extraHeaders["X-PH-Contact-Id"] ?? "",
             "state": call.state.rawValue,
             "muted": call.muted,
             "isOnHold": call.isOnHold
