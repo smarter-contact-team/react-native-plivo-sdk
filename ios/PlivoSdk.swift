@@ -175,10 +175,11 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     //    onOutgoingCalling
-    func onCalling(_ call: PlivoOutgoing!) {
-        outgoingCall = call;
+    func onCalling(_ outgoing: PlivoOutgoing!) {
+        outgoingCall = outgoing;
         configureAudioSession()
         startAudioDevice()
+        delegate?.onCalling(convertOutgoingCallToObject(outgoing))
     }
 
     func onOutgoingCallRejected(_ outgoing: PlivoOutgoing) {
