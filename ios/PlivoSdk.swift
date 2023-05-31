@@ -10,7 +10,7 @@ protocol PlivoSdkDelegate: AnyObject {
     func onLogout()
     func onLoginFailedWithError(_ error: Error!)
     // Outgoing call
-    func onCalling()
+    func onCalling(_ data: [String: Any])
     func onOutgoingCallRejected(_ data: [String: Any])
     func onOutgoingCallInvalid(_ data: [String: Any])
     func onOutgoingCallRinging(_ data: [String: Any])
