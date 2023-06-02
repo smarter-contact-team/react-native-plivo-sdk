@@ -9,6 +9,7 @@ enum CallState {
 }
 
 interface PlivoLoginEvent {}
+interface PlivoLogoutEvent {}
 
 interface PlivoOutgoingEvent {
   callId: string;
@@ -91,6 +92,14 @@ export class PlivoClient {
   onLogin(handler: Handler<PlivoLoginEvent>) {
     return createListener('onLogin', (event: PlivoLoginEvent) => {
       this._isLoggedIn = true;
+
+      handler(event);
+    });
+  }
+
+  onLogout(handler: Handler<PlivoLogoutEvent>) {
+    return createListener('onLogout', (event: PlivoLogoutEvent) => {
+      this._isLoggedIn = false;
 
       handler(event);
     });
