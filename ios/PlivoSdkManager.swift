@@ -4,6 +4,7 @@ import PlivoVoiceKit
 @objc(PlivoSdkManager)
 final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
     private let shared = PlivoSdk.shared
+    private let audioDeviceManager = AudioDeviceManager()
 
     private var hasListeners : Bool = false
 
@@ -11,6 +12,7 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
         super.init()
 
         PlivoSdk.shared.delegate = self
+        audioDeviceManager.delegate = self
     }
 
     override static func requiresMainQueueSetup() -> Bool {
@@ -32,7 +34,8 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
             "Plivo-onOutgoingCallRinging",
             "Plivo-onOutgoingCallRejected",
             "Plivo-onOutgoingCallHangup",
-            "Plivo-onOutgoingCallInvalid"
+            "Plivo-onOutgoingCallInvalid",
+            "Plivo-headphonesStateChanged"
         ]
     }
 
@@ -106,10 +109,15 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
 
     @objc func startAudioDevice() {
         shared.startAudioDevice()
+        audioDeviceManager.isBluetoothDeviceConnected()
     }
 
     @objc func stopAudioDevice() {
         shared.stopAudioDevice()
+    }
+
+    @objc func setAudioDevice(_ device: Int) {
+        audioDeviceManager.setAudioDevice(type: device)
     }
 
     func onLogin() {
@@ -171,4 +179,8 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
     }
 }
 
-
+extension PlivoSdkManager: AudioDeviceManagerDelegate {
+    func didChangeHeadphonesState(connected: Bool) {
+        sendEvent(withName: "Plivo-headphonesStateChanged", body: ["connected": connected])
+    }
+}

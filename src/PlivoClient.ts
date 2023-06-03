@@ -64,6 +64,10 @@ export class PlivoClient {
     PlivoNativeSdk.stopAudioDevice();
   }
 
+  setAudioDevice(device: number) {
+    PlivoNativeSdk.setAudioDevice(device);
+  }
+
   mute() {
     PlivoNativeSdk.mute();
   }
@@ -142,5 +146,9 @@ export class PlivoClient {
 
   onOutgoingCallInvalid(handler: Handler<PlivoOutgoingEvent>) {
     return createListener('onOutgoingCallInvalid', handler);
+  }
+
+  onHeadphonesStateChanged(handler: Handler<{connected: boolean}>) {
+    return createListener('headphonesStateChanged', handler);
   }
 }
