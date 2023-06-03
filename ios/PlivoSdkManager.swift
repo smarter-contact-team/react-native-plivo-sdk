@@ -136,7 +136,9 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
         sendEvent(withName: "Plivo-onLoginFailed", body:nil);
     }
 
-    func onCalling() {}
+    func onCalling(_ data: [String: Any]) {
+        sendEvent(withName: "Plivo-onOutgoingCall", body: data);
+    }
 
     func onOutgoingCallRejected(_ data: [String: Any]) {
         sendEvent(withName: "Plivo-onOutgoingCallRejected", body: data);

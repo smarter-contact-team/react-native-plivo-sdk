@@ -10,7 +10,7 @@ protocol PlivoSdkDelegate: AnyObject {
     func onLogout()
     func onLoginFailedWithError(_ error: Error!)
     // Outgoing call
-    func onCalling()
+    func onCalling(_ data: [String: Any])
     func onOutgoingCallRejected(_ data: [String: Any])
     func onOutgoingCallInvalid(_ data: [String: Any])
     func onOutgoingCallRinging(_ data: [String: Any])
@@ -175,10 +175,11 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     //    onOutgoingCalling
-    func onCalling(_ call: PlivoOutgoing!) {
-        outgoingCall = call;
+    func onCalling(_ outgoing: PlivoOutgoing!) {
+        outgoingCall = outgoing;
         configureAudioSession()
         startAudioDevice()
+        delegate?.onCalling(convertOutgoingCallToObject(outgoing))
     }
 
     func onOutgoingCallRejected(_ outgoing: PlivoOutgoing) {
@@ -241,19 +242,24 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     private func convertIncomingCallToObject(_ call: PlivoIncoming!) -> [String: Any] {
-        // callId comes with extra characters in method onIncomingCall(_ incoming: PlivoIncoming!)
-        // ": 86414ebc-997b-4c9e-a905-bf4b37180430" instead of "86414ebc-997b-4c9e-a905-bf4b37180430"
-        let callIdWithExtra = call.extraHeaders["X-PH-Original-Call-Id"] as? String
-        let correctCallId = callIdWithExtra?.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: " ", with: "")
+          let callId = call.extraHeaders["X-PH-Original-Call-Id"] as? String;
+          let callerName = call.extraHeaders["X-PH-Contact"] as? String;
+          let callerId = call.extraHeaders["X-PH-Contact-Id"] as? String;
 
-        let body: [String: Any] = [
-            "callId": correctCallId ?? "",
-            "from": call.extraHeaders["X-PH-Contact"] ?? "",
-            "state": call.state.rawValue,
-            "muted": call.muted,
-            "isOnHold": call.isOnHold
-        ];
+          let body: [String: Any] = [
+              "callId": normalizeHeaderValue(value:callId) ?? "",
+              "callerPhone": call.fromUser ?? "",
+              "callerName": normalizeHeaderValue(value:callerName) ?? "",
+              "callerId": normalizeHeaderValue(value:callerId) ?? "",
+              "state": call.state.rawValue,
+              "muted": call.muted,
+              "isOnHold": call.isOnHold
+          ];
 
-        return body;
-    }
+          return body;
+      }
+
+      private func normalizeHeaderValue(value: String?) -> String? {
+          return value?.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: " ", with: "")
+      }
 }

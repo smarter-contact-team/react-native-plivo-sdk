@@ -6,6 +6,8 @@ declare enum CallState {
 }
 interface PlivoLoginEvent {
 }
+interface PlivoLogoutEvent {
+}
 interface PlivoOutgoingEvent {
     callId: string;
     state: CallState;
@@ -34,6 +36,7 @@ export declare class PlivoClient {
     reject(): void;
     isLoggedIn(): boolean;
     onLogin(handler: Handler<PlivoLoginEvent>): () => void;
+    onLogout(handler: Handler<PlivoLogoutEvent>): () => void;
     onLoginFailed(handler: Handler<PlivoLoginEvent>): () => void;
     onIncomingCall(handler: Handler<PlivoIncomingEvent>): () => void;
     onIncomingCallHangup(handler: Handler<PlivoIncomingEvent>): () => void;
