@@ -53,16 +53,8 @@ export class PlivoClient {
     this._isLoggedIn = false;
   }
 
-  configureAudioSession() {
-    PlivoNativeSdk.configureAudioSession();
-  }
-
-  startAudioDevice() {
-    PlivoNativeSdk.startAudioDevice();
-  }
-
-  stopAudioDevice() {
-    PlivoNativeSdk.stopAudioDevice();
+  setAudioDevice(device: number) {
+    PlivoNativeSdk.setAudioDevice(device);
   }
 
   mute() {
@@ -151,5 +143,9 @@ export class PlivoClient {
 
   onOutgoingCallInvalid(handler: Handler<PlivoOutgoingEvent>) {
     return createListener('onOutgoingCallInvalid', handler);
+  }
+
+  onHeadphonesStateChanged(handler: Handler<{connected: boolean}>) {
+    return createListener('headphonesStateChanged', handler);
   }
 }

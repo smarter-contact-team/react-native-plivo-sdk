@@ -20,10 +20,6 @@ RCT_EXTERN_METHOD(hangup)
 RCT_EXTERN_METHOD(reject)
 RCT_EXTERN_METHOD(answer)
 
-RCT_EXTERN_METHOD(configureAudioSession)
-
-RCT_EXTERN_METHOD(startAudioDevice)
-
-RCT_EXTERN_METHOD(stopAudioDevice)
+RCT_EXTERN_METHOD(setAudioDevice:(NSInteger *)device)
 
 @end

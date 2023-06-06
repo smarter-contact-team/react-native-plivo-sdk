@@ -26,7 +26,7 @@ import java.util.Map;
 
 @ReactModule(name = PlivoSdkModule.NAME)
 public class PlivoSdkModule extends ReactContextBaseJavaModule implements EventListener {
-    public static final String NAME = "PlivoSdk";
+    public static final String NAME = "PlivoSdkManager";
 
     private final ReactApplicationContext reactContext;
 
