@@ -26,9 +26,7 @@ export declare class PlivoClient {
     login(username: string, password: string, fcmToken: string, certificateId: string): any;
     call(phoneNumber: string, headers: Record<string, string>): any;
     logout(): void;
-    configureAudioSession(): void;
-    startAudioDevice(): void;
-    stopAudioDevice(): void;
+    setAudioDevice(device: number): void;
     mute(): void;
     unmute(): void;
     answer(): void;
@@ -49,6 +47,9 @@ export declare class PlivoClient {
     onOutgoingCallRejected(handler: Handler<PlivoOutgoingEvent>): () => void;
     onOutgoingCallHangup(handler: Handler<PlivoOutgoingEvent>): () => void;
     onOutgoingCallInvalid(handler: Handler<PlivoOutgoingEvent>): () => void;
+    onHeadphonesStateChanged(handler: Handler<{
+        connected: boolean;
+    }>): () => void;
 }
 export {};
 //# sourceMappingURL=PlivoClient.d.ts.map
