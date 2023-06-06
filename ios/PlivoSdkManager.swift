@@ -103,19 +103,6 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
         shared.reject()
     }
 
-    @objc func configureAudioSession() {
-        shared.configureAudioSession()
-    }
-
-    @objc func startAudioDevice() {
-        shared.startAudioDevice()
-        audioDeviceManager.isBluetoothDeviceConnected()
-    }
-
-    @objc func stopAudioDevice() {
-        shared.stopAudioDevice()
-    }
-
     @objc func setAudioDevice(_ device: Int) {
         audioDeviceManager.setAudioDevice(type: device)
     }
@@ -137,6 +124,7 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
     }
 
     func onCalling(_ data: [String: Any]) {
+        audioDeviceManager.isBluetoothDeviceConnected()
         sendEvent(withName: "Plivo-onOutgoingCall", body: data);
     }
 
@@ -169,6 +157,7 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
     }
 
     func onIncomingCallAnswered(_ data: [String: Any]) {
+        audioDeviceManager.isBluetoothDeviceConnected()
         sendEvent(withName: "Plivo-onIncomingCallAnswered", body: data);
     }
 

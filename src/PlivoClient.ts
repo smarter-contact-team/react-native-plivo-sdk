@@ -53,18 +53,6 @@ export class PlivoClient {
     this._isLoggedIn = false;
   }
 
-  configureAudioSession() {
-    PlivoNativeSdk.configureAudioSession();
-  }
-
-  startAudioDevice() {
-    PlivoNativeSdk.startAudioDevice();
-  }
-
-  stopAudioDevice() {
-    PlivoNativeSdk.stopAudioDevice();
-  }
-
   setAudioDevice(device: number) {
     PlivoNativeSdk.setAudioDevice(device);
   }
