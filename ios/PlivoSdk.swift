@@ -33,6 +33,7 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     private let credentialsManager = CredentialsManager()
     private var isLoggedIn: Bool = false
     private var pendingPushInfo: [AnyHashable : Any]?
+    private var answerPending: Bool = false
 
     private var endpoint: PlivoEndpoint? = PlivoEndpoint(["debug" : true, "enableTracking":true])
 
@@ -52,6 +53,7 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
         certificateId: String
         )
         -> Void {
+            os_log("--->>> login with creds", userName, password, token, certificateId)
             // converrt hex string token to Data
             let tokenData: Data = Data(convertHex(token.unicodeScalars, i: token.unicodeScalars.startIndex, appendTo: []))
 
@@ -66,8 +68,10 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
     func relayVoipPushNotification(pushInfo: [AnyHashable : Any]) {
         if isLoggedIn {
+            os_log("--->>> going straight to relay")
             endpoint?.relayVoipPushNotification(pushInfo)
         } else {
+            os_log("--->>> need to login first")
             pendingPushInfo = pushInfo
 
             if let username = credentialsManager.username,
@@ -128,7 +132,12 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     // answer incoming call
     func answer() {
         if (incomingCall != nil) {
-            incomingCall?.answer()
+            os_log("--->>> answer incoming")
+            self.incomingCall?.answer()
+            self.answerPending = false
+        } else {
+            os_log("--->>> answer, but incoming is nil")
+            answerPending = true
         }
     }
 
@@ -154,15 +163,18 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     func onLogin() {
+        os_log("--->>> onLogin")
         delegate?.onLogin()
         isLoggedIn = true
         if let pushInfo = pendingPushInfo {
+            os_log("--->>> relay after login")
             endpoint?.relayVoipPushNotification(pushInfo)
             pendingPushInfo = nil
         }
     }
 
     func onLoginFailed() {
+        os_log("--->>> onLoginFailed")
         delegate?.onLoginFailed()
     }
 
@@ -205,9 +217,15 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     func onIncomingCall(_ incoming: PlivoIncoming!) {
+        os_log("--->>> onIncoming")
         incomingCall = incoming
         configureAudioSession()
         delegate?.onIncomingCall(convertIncomingCallToObject(incoming))
+
+        if answerPending {
+            os_log("--->>> answer after onIncoming")
+            answer()
+        }
     }
 
     func onIncomingCallAnswered(_ incoming: PlivoIncoming!) {
@@ -216,6 +234,7 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     func onIncomingCallRejected(_ incoming: PlivoIncoming!) {
+        os_log("--->>> onRejected")
         delegate?.onIncomingCallRejected(convertIncomingCallToObject(incoming))
         incomingCall = nil
     }
@@ -227,6 +246,7 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     func onIncomingCallInvalid(_ incoming: PlivoIncoming!) {
+        os_log("--->>> onInvalid")
         delegate?.onIncomingCallInvalid(convertIncomingCallToObject(incoming))
     }
 
