@@ -55,7 +55,8 @@ struct CredentialsManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
-            kSecValueData as String: value.data(using: .utf8)!
+            kSecValueData as String: value.data(using: .utf8)!,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock
         ]
 
         var status = SecItemAdd(keychainQuery as CFDictionary, nil)
