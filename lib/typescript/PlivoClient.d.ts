@@ -25,6 +25,7 @@ export declare class PlivoClient {
     private _isLoggedIn;
     login(username: string, password: string, fcmToken: string, certificateId: string): any;
     call(phoneNumber: string, headers: Record<string, string>): any;
+    reconnect(): void;
     logout(): void;
     setAudioDevice(device: number): void;
     mute(): void;
