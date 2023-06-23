@@ -74,6 +74,10 @@ final class PlivoSdkManager: RCTEventEmitter, PlivoSdkDelegate {
                                   certificateId: certificateId)
     }
 
+    @objc func reconnect() {
+        shared.reconnect()
+    }
+
     @objc func logout() {
         shared.logout()
     }

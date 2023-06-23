@@ -59,6 +59,17 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
             endpoint?.login(userName, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
     }
 
+    func reconnect() {
+        if let username = credentialsManager.username,
+           let password = credentialsManager.password,
+           let deviceToken = credentialsManager.deviceToken,
+           let certificateId = credentialsManager.certificateId {
+            let tokenData: Data = Data(convertHex(deviceToken.unicodeScalars, i: deviceToken.unicodeScalars.startIndex, appendTo: []))
+
+            endpoint?.login(username, andPassword: password, deviceToken: tokenData, certificateId: certificateId);
+        }
+    }
+
     func logout() {
         credentialsManager.deleteCredentials()
         endpoint?.logout()

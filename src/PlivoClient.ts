@@ -48,6 +48,10 @@ export class PlivoClient {
     return PlivoNativeSdk.call(phoneNumber, headers);
   }
 
+  reconnect() {
+    PlivoNativeSdk.reconnect();
+  }
+
   logout() {
     PlivoNativeSdk.logout();
     this._isLoggedIn = false;
