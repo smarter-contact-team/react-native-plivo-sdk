@@ -60,6 +60,8 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
     }
 
     func reconnect() {
+        guard incomingCall == nil && outgoingCall == nil else { return }
+        
         if let username = credentialsManager.username,
            let password = credentialsManager.password,
            let deviceToken = credentialsManager.deviceToken,
