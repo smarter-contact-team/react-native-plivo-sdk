@@ -230,7 +230,12 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
 
     func onIncomingCallRejected(_ incoming: PlivoIncoming!) {
         delegate?.onIncomingCallRejected(convertIncomingCallToObject(incoming))
-        incomingCall = nil
+
+        dismissCallKitUI { [weak self] error in
+            if error == nil {
+                self?.incomingCall = nil
+            }
+        }
     }
 
     func onIncomingCallHangup(_ incoming: PlivoIncoming!) {
@@ -272,7 +277,26 @@ final class PlivoSdk: NSObject, PlivoEndpointDelegate {
           return body;
       }
 
-      private func normalizeHeaderValue(value: String?) -> String? {
-          return value?.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: " ", with: "")
-      }
+    private func normalizeHeaderValue(value: String?) -> String? {
+        return value?.replacingOccurrences(of: ":", with: "").replacingOccurrences(of: " ", with: "")
+    }
+
+    private func dismissCallKitUI(_ completion: @escaping (Error?) -> Void) {
+        let callController = CXCallController()
+
+        guard let originalCallId = incomingCall?.extraHeaders["X-PH-Original-Call-Id"] as? String,
+              let callId = normalizeHeaderValue(value: originalCallId),
+              let uuid = UUID(uuidString: callId)
+        else {
+            completion(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid UUID"]))
+            return
+        }
+
+        let endCallAction = CXEndCallAction(call: uuid)
+        let transaction = CXTransaction(action: endCallAction)
+
+        callController.request(transaction) { error in
+            completion(error)
+        }
+    }
 }
