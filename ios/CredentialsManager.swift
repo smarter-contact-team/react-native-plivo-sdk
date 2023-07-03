@@ -55,6 +55,7 @@ struct CredentialsManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
             kSecValueData as String: value.data(using: .utf8)!
         ]
 
@@ -65,7 +66,8 @@ struct CredentialsManager {
             let updateQuery: [String: Any] = [
                 kSecClass as String: kSecClassGenericPassword,
                 kSecAttrService as String: service,
-                kSecAttrAccount as String: account
+                kSecAttrAccount as String: account,
+                kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
             ]
             let updateData: [String: Any] = [
                 kSecValueData as String: value.data(using: .utf8)!
